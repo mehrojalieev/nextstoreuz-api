@@ -19,7 +19,7 @@ db.on('error', console.error.bind(console, 'connection error !!!:'));
 db.once('open', () => console.log('Connected to MongoDB !'));
 
 // Swagger UI route
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use('/swagger/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Routers
 app.use("/product", require('./routes/products'));

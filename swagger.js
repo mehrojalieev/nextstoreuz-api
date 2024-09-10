@@ -15,7 +15,7 @@ const swaggerOptions = {
       },
       servers: [
         {
-          url: "https://parfume-deploy-1.onrender.com",
+          url: "https://nextstoreuz-api.onrender.com",
         },
       ],
     },
