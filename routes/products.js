@@ -7,7 +7,7 @@ const router = express.Router();
 /**
  * @swagger
  * /product/all:
- *   get:
+ *   get:   
  *     summary: Barcha mahsulotlarni olish
  *     tags: [Products]
  *     responses:

@@ -15,7 +15,7 @@ const swaggerOptions = {
       },
       servers: [
         {
-          url: `http://localhost:${process.env.PORT || 8080}`, // Lokal server
+          url: "https://parfume-deploy-1.onrender.com",
         },
       ],
     },
