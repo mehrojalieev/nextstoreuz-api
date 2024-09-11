@@ -1,21 +1,42 @@
+const express = require('express');
+const ProductSchema = require('../models/products');
+const Joi = require('joi');
+
+const router = express.Router();
+
+// Define Joi validation schema
+
+const productValidationSchema = Joi.object({
+    title: Joi.string().required(),
+    price: Joi.number().required(),
+    description: Joi.string().required(),
+    category: Joi.string().required(),
+    imageUrl: Joi.string().required()
+})
+
 // Get All Products
 /**
  * @swagger
  * /product/all:
- *   get:
- *     summary: Get all products
+ *   get:   
+ *     summary: Barcha mahsulotlarni olish
  *     tags: [Products]
  *     responses:
  *       200:
- *         description: Successfully retrieved all products
+ *         description: Mahsulotlar muvaffaqiyatli qaytarildi
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Product'
- *       500:
- *         description: Server error
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   name:
+ *                     type: string
+ *                   price:
+ *                     type: number
  */
 router.get('/all', async (req, res) => {
     try {
@@ -26,31 +47,29 @@ router.get('/all', async (req, res) => {
     }
 });
 
-// Get Product by ID
+
+
+// Get product by ID
 /**
  * @swagger
  * /product/{id}:
  *   get:
- *     summary: Get product by ID
+ *     summary: Mahsulotni ID orqali olish
  *     tags: [Products]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID of the product to retrieve
+ *         description: Mahsulotning IDsi
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Successfully retrieved the product
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Product'
+ *         description: Mahsulot muvaffaqiyatli qaytarildi
  *       404:
- *         description: Product not found
+ *         description: Mahsulot topilmadi
  *       500:
- *         description: Server error
+ *         description: Xatolik yuz berdi
  */
 router.get('/:id', async (req, res) => {
     try {
@@ -64,7 +83,10 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Create Product
+
+// POST Product
+
+
 /**
  * @swagger
  * /product/create:
@@ -76,65 +98,103 @@ router.get('/:id', async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/ProductInput'
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: The product title
+ *                 example: "New Product"
+ *               price:
+ *                 type: number
+ *                 description: The product price
+ *                 example: 19.99
+ *               description:
+ *                 type: string
+ *                 description: The product description
+ *                 example: "This is a new product."
+ *               category:
+ *                 type: string
+ *                 description: The product category
+ *                 example: "Electronics"
+ *               imageUrl:
+ *                 type: string
+ *                 description: The URL of the product image
+ *                 example: "http://example.com/image.png"
  *     responses:
  *       200:
  *         description: Product created successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Product'
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   description: The product ID
+ *                 title:
+ *                   type: string
+ *                   description: The product title
+ *                 price:
+ *                   type: number
+ *                   description: The product price
+ *                 description:
+ *                   type: string
+ *                   description: The product description
+ *                 category:
+ *                   type: string
+ *                   description: The product category
+ *                 imageUrl:
+ *                   type: string
+ *                   description: The product image URL
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                   description: The date the product was created
  *       400:
  *         description: Validation error
  *       500:
  *         description: Server error
  */
+
+
 router.post('/create', async (req, res) => {
+
     const { error, value } = productValidationSchema.validate(req.body, { stripUnknown: true });
 
     if (error) {
-        return res.status(400).json({ message: error.details[0].message });
+        return res.status(400).json({ message: error.details[0].message })
     }
     try {
-        const newProduct = new ProductSchema(value);
+        const newProduct = new ProductSchema(value)
         const savedProduct = await newProduct.save();
         res.status(200).json(savedProduct);
-    } catch (error) {
+    }
+    catch (error) {
         res.status(500).json({ message: error.message });
     }
-});
+})
 
-// Delete Product by ID
+// DELETE Product by ID
 /**
  * @swagger
  * /product/delete/{id}:
  *   delete:
- *     summary: Delete a product by ID
+ *     summary: Mahsulotni ID orqali o'chirish
  *     tags: [Products]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID of the product to delete
+ *         description: O'chirilishi kerak bo'lgan mahsulotning IDsi
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Product deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Product deleted successfully
- *                 Product:
- *                   $ref: '#/components/schemas/Product'
+ *         description: Mahsulot muvaffaqiyatli o'chirildi
  *       404:
- *         description: Product not found
+ *         description: Mahsulot topilmadi
  *       500:
- *         description: Server error
+ *         description: Xatolik yuz berdi
  */
 router.delete('/delete/:id', async (req, res) => {
     try {
