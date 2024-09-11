@@ -103,18 +103,18 @@ router.get('/:id', async (req, res) => {
  *               title:
  *                 type: string
  *                 description: The product title
- *                 example: "New Product"
+ *                 example: "Mahsulotni nomini kirit"
  *               price:
  *                 type: number
  *                 description: The product price
  *                 example: 19.99
  *               description:
  *                 type: string
- *                 description: The product description
+ *                 description: Mahsulot haqida ma;lumot kirit
  *                 example: "This is a new product."
  *               category:
  *                 type: string
- *                 description: The product category
+ *                 description: Mahsulotni kategoriyasi
  *                 example: "Electronics"
  *               imageUrl:
  *                 type: string
