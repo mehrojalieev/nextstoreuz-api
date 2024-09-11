@@ -70,6 +70,19 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+
+// POST Product
+router.post('/create', async (req, res) => {
+   const {title, price, description, category, imageUrl} = req.body
+    try {
+        const savedProduct = await ProductSchema.create({title, price, description, category, imageUrl});
+        res.status(200).json(savedProduct); 
+    } 
+    catch (error) {
+        res.status(500).json({ message: error.message });    
+    }
+})
+
 // DELETE Product by ID
 /**
  * @swagger
