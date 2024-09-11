@@ -1,7 +1,18 @@
 const express = require('express');
 const ProductSchema = require('../models/products');
+const Joi = require('joi');
 
 const router = express.Router();
+
+// Define Joi validation schema
+
+const productValidationSchema = Joi.object({
+    title: Joi.string().required(),
+    price: Joi.number().required(),
+    description: Joi.string().required(),
+    category: Joi.string().required(),
+    imageUrl: Joi.string().required()
+})
 
 // Get All Products
 /**
@@ -35,6 +46,8 @@ router.get('/all', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
+
 
 // Get product by ID
 /**
@@ -72,14 +85,21 @@ router.get('/:id', async (req, res) => {
 
 
 // POST Product
+
 router.post('/create', async (req, res) => {
-   const {title, price, description, category, imageUrl} = req.body
+
+    const { error, value } = productValidationSchema.validate(req.body, { stripUnknown: true });
+
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message })
+    }
     try {
-        const savedProduct = await ProductSchema.create({title, price, description, category, imageUrl});
-        res.status(200).json(savedProduct); 
-    } 
+        const newProduct = new ProductSchema(value)
+        const savedProduct = await newProduct.save();
+        res.status(200).json(savedProduct);
+    }
     catch (error) {
-        res.status(500).json({ message: error.message });    
+        res.status(500).json({ message: error.message });
     }
 })
 
