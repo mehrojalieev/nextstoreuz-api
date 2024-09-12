@@ -174,6 +174,50 @@ router.post('/create', async (req, res) => {
     }
 })
 
+
+// PUT Product by ID
+/**
+ * @swagger
+ * /product/update/{id}:
+ *   put:
+ *     summary: Mahsulotni ID orqali yangilash
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Yangilash kerak bo'lgan mahsulotning IDsi
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ * 
+ *     responses:
+ *       200:
+ *         description: Mahsulot muvaffaqiyatli yangilandi
+ *       404:
+ *         description: Mahsulot topilmadi
+ *       500:
+ *         description: Xatolik yuz berdi
+ */
+
+
+router.put('/update/:id', async (req, res) => {
+    try {
+        const updatedProduct = await ProductSchema.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedProduct) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+        res.status(200).json(updatedProduct);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // DELETE Product by ID
 /**
  * @swagger
