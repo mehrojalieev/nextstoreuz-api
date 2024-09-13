@@ -16,9 +16,11 @@ router.post("/auth/register", async (req, res) => {
 
     const { error, value } = userValidationSchema.validate(req.body, { stripUnknown: true })
     
-    if (error) return res.status(400).json({ message: error.details[0].message });
+    if (error){
+        return res.status(400).json({ message: error.details[0].message });
+    } 
 
-    let userExict = UserSchema.findOne({email: value.email})
+    let userExict = await UserSchema.findOne({email: value.email})
 
     if(userExict){
         return res.status(400).json({message: "Email already exists !"})
