@@ -157,7 +157,7 @@ router.get('/:id', async (req, res) => {
  */
 
 
-router.post('/create', async (req, res) => {
+router.post('/create',  async (req, res) => {
 
     const { error, value } = productValidationSchema.validate(req.body, { stripUnknown: true });
 
