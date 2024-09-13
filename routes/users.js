@@ -18,7 +18,7 @@ router.post("/auth/register", async (req, res) => {
     
     if (error) return res.status(400).json({ message: error.details[0].message });
 
-    let userExict = UserSchema.find({email: value.email})
+    let userExict = UserSchema.findOne({email: value.email})
 
     if(userExict){
         return res.status(400).json({message: "Email already exists !"})
