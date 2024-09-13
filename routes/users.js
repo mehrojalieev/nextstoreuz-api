@@ -12,7 +12,7 @@ const userValidationSchema = Joi.object({
 })
 
 
-router.post("/register", async (req, res) => {
+router.post("/auth/register", async (req, res) => {
 
     const { error, value } = userValidationSchema.validate(req.body, { stripUnknown: true })
     
