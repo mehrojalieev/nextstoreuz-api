@@ -22,6 +22,8 @@ db.once('open', () => console.log('Connected to MongoDB !'));
 app.use('/swagger/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Routers
-app.use("/product", require('./routes/products'));
+app.use("/api/product", require('./routes/products'));
+app.use("/api", require("./routes/users"))
+
 
 app.listen(PORT, () => console.log('Server started on port ' + PORT));
