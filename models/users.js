@@ -24,6 +24,10 @@ const usersSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,  
     },
+    role: {
+        type: String,
+        default: "user"
+    }
 });
 
 // Model creation

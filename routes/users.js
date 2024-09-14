@@ -4,7 +4,7 @@ const UserSchema = require("../models/users");
 
 const router = express.Router();
 
-// Validation schema
+// Validation schema for registration
 const userValidationSchema = Joi.object({
     firstname: Joi.string().required(),
     lastname: Joi.string().required(),
@@ -12,12 +12,53 @@ const userValidationSchema = Joi.object({
     password: Joi.string().trim().required()
 });
 
+/** 
+ * @swagger
+ * /api/user/all:
+ *   get:
+ *     summary: Get all users
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: All users were retrieved successfully
+ *         content: 
+ *           application/json:
+ *             schema: 
+ *               type: array
+ *               items: 
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   firstname:
+ *                     type: string
+ *                   lastname:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *                   password:
+ *                     type: string
+ *                   role:
+ *                     type: string
+ */
+
+// Route to get all users
+router.get("/user/all", async (req, res) => {
+    try {   
+        const AllUsers = await UserSchema.find();
+        res.status(200).json(AllUsers);
+    } 
+    catch (error) {
+        res.status(500).json({message: error.message});    
+    }
+});
+
 /**
  * @swagger
- * /auth/register:
+ * /api/auth/register:
  *   post:
  *     summary: Register a new user
- *     tags: [User]
+ *     tags: [Users]
  *     requestBody:
  *       required: true
  *       content:
@@ -69,12 +110,14 @@ const userValidationSchema = Joi.object({
  *                   format: date-time
  *                   description: The date the user was created
  *       400:
- *         description: Validation error
+ *         description: Validation error or email already exists
  *       500:
  *         description: Server error
  */
 
+// Route to register a new user
 router.post("/auth/register", async (req, res) => {
+    // Validate user input
     const { error, value } = userValidationSchema.validate(req.body, { stripUnknown: true });
     
     if (error) {
@@ -82,12 +125,14 @@ router.post("/auth/register", async (req, res) => {
     }
 
     try {
+        // Check if user with the same email exists
         const userExists = await UserSchema.findOne({ email: value.email });
 
         if (userExists) {
             return res.status(400).json({ message: "Email already exists!" });
         }
 
+        // Create new user
         const newUser = await UserSchema.create(value);
         res.status(200).json(newUser);
     } catch (err) {

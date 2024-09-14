@@ -17,7 +17,7 @@ const productValidationSchema = Joi.object({
 // Get All Products
 /**
  * @swagger
- * /product/all:
+ * /api/product/all:
  *   get:   
  *     summary: Barcha mahsulotlarni olish
  *     tags: [Products]
@@ -52,7 +52,7 @@ router.get('/all', async (req, res) => {
 // Get product by ID
 /**
  * @swagger
- * /product/{id}:
+ * /api/product/{id}:
  *   get:
  *     summary: Mahsulotni ID orqali olish
  *     tags: [Products]
@@ -89,7 +89,7 @@ router.get('/:id', async (req, res) => {
 
 /**
  * @swagger
- * /product/create:
+ * /api/product/create:
  *   post:
  *     summary: Create a new product
  *     tags: [Products]
@@ -178,7 +178,7 @@ router.post('/create',  async (req, res) => {
 // PUT Product by ID
 /**
  * @swagger
- * /product/update/{id}:
+ * /api/product/update/{id}:
  *   put:
  *     summary: Mahsulotni ID orqali yangilash
  *     tags: [Products]
@@ -221,7 +221,7 @@ router.put('/update/:id', async (req, res) => {
 // DELETE Product by ID
 /**
  * @swagger
- * /product/delete/{id}:
+ * /api/product/delete/{id}:
  *   delete:
  *     summary: Mahsulotni ID orqali o'chirish
  *     tags: [Products]
