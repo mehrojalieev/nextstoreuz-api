@@ -84,6 +84,76 @@ router.get('/:id', async (req, res) => {
 });
 
 
+
+/**
+ * @swagger
+ * /api/product/category/all:
+ *   get:
+ *     summary: Get all categories
+ *     tags: [Products]
+ *     responses:
+ *       200:
+ *         description: A list of all unique categories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: string
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/category/all", async (req, res) => {
+    try {
+        const allCategories = await ProductSchema.distinct('category');
+        return res.status(200).json(allCategories);
+    }   
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+/**
+ * @swagger
+ * /api/product/category/{categoryName}:
+ *   get:
+ *     summary: Get products by category
+ *     tags: [Products]
+ *     parameters:
+ *       - name: categoryName
+ *         in: path
+ *         required: true
+ *         description: The name of the category to fetch products for
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A list of products for the given category
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
+ *       404:
+ *         description: Category not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/category/:categoryName", async (req, res) => {
+    try {
+        const singleCategory = await ProductSchema.find({ category: req.params.categoryName });
+        if (singleCategory.length === 0) {
+            return res.status(404).json({ message: "Category not found" });
+        }
+        res.status(200).json(singleCategory);
+    } 
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
 // POST Product
 
 
