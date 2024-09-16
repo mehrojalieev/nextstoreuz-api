@@ -4,15 +4,19 @@ const Joi = require('joi');
 
 const router = express.Router();
 
-// Define Joi validation schema
 
 const productValidationSchema = Joi.object({
     title: Joi.string().required(),
     price: Joi.number().required(),
     description: Joi.string().required(),
-    category: Joi.string().required(),
-    imageUrl: Joi.string().required()
-})
+    category: Joi.object({
+        name: Joi.string().required(),
+        image: Joi.string().uri().required()
+    }).required(),
+    brand: Joi.string().required(),
+    imagesUrl: Joi.array().items(Joi.string().uri()).required()
+});
+
 
 // Get All Products
 /**
@@ -180,16 +184,29 @@ router.get("/category/:categoryName", async (req, res) => {
  *                 example: 19.99
  *               description:
  *                 type: string
- *                 description: Mahsulot haqida ma;lumot kirit
+ *                 description: Mahsulot haqida ma'lumot kirit
  *                 example: "This is a new product."
  *               category:
+ *                 type: object
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                     description: The category name
+ *                     example: "Electronics"
+ *                   image:
+ *                     type: string
+ *                     description: The URL of the category image
+ *                     example: "https://placeimg.com/640/480/any?r=0.591926261873231"
+ *               brand:
  *                 type: string
- *                 description: Mahsulotni kategoriyasi
- *                 example: "Electronics"
- *               imageUrl:
- *                 type: string
- *                 description: The URL of the product image
- *                 example: "http://example.com/image.png"
+ *                 description: The product brand
+ *                 example: "BrandName"
+ *               imagesUrl:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: The URLs of the product images
+ *                 example: ["http://example.com/image1.png", "http://example.com/image2.png"]
  *     responses:
  *       200:
  *         description: Product created successfully
@@ -211,11 +228,22 @@ router.get("/category/:categoryName", async (req, res) => {
  *                   type: string
  *                   description: The product description
  *                 category:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                       description: The category name
+ *                     image:
+ *                       type: string
+ *                       description: The category image URL
+ *                 brand:
  *                   type: string
- *                   description: The product category
+ *                   description: The product brand
  *                 imageUrl:
- *                   type: string
- *                   description: The product image URL
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   description: The URLs of the product images
  *                 createdAt:
  *                   type: string
  *                   format: date-time
