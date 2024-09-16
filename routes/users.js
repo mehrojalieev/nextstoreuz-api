@@ -119,7 +119,6 @@ router.get("/user/all", async (req, res) => {
 
 // Route to register a new user
 router.post("/auth/register", async (req, res) => {
-    // Validate user input
     const { error, value } = userValidationSchema.validate(req.body, { stripUnknown: true });
 
     if (error) {
@@ -127,7 +126,6 @@ router.post("/auth/register", async (req, res) => {
     }
 
     try {
-        // Check if user with the same email exists
         const userExists = await UserSchema.findOne({ email: value.email });
 
         if (userExists) {
@@ -137,7 +135,6 @@ router.post("/auth/register", async (req, res) => {
         const hashedPassword = await bcrypt.hash(value.password, 10)
         value.password = hashedPassword
 
-        // Create new user
         const newUser = await UserSchema.create(value);
         res.status(201).json({
             data: newUser,
