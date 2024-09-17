@@ -93,29 +93,50 @@ router.get('/:id', async (req, res) => {
  * @swagger
  * /api/product/category/all:
  *   get:
- *     summary: Get all categories
+ *     summary: Get all categories with their images
  *     tags: [Products]
  *     responses:
  *       200:
- *         description: A list of all unique categories
+ *         description: A list of all unique categories with their images
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 type: string
+ *                 type: object
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                   image:
+ *                     type: string
  *       500:
  *         description: Internal server error
  */
 router.get("/category/all", async (req, res) => {
     try {
-        const allCategories = await ProductSchema.distinct('category');
-        return res.status(200).json(allCategories);
+        // Fetch all unique category names
+        const allCategories = await ProductSchema.distinct('category.name');
+
+        const categoryImages = {
+            mobile: "https://basket-10.wb.ru/vol1410/part141005/141005659/images/big/1.jpg",
+            laptop: "https://agroup.by/upload/Sh/imageCache/415/282/2820983455529034.webp",
+            watch: "https://static.insales-cdn.com/images/products/1/7963/669277979/1.jpg",
+            television: "https://minio.alifshop.uz/shop/products/wZqO8UbKouZBArs78ziI4zvfqAh9NN02DRcqfb3l.png",
+            muzlatgich: "https://st3.stpulscen.ru/images/product/048/896/251_original.jpg"
+        };
+
+        const categoriesWithImages = allCategories.map(category => ({
+            name: category,
+            image: categoryImages[category] || "https://via.placeholder.com/150" // Default image if category doesn't have one
+        }));
+
+        return res.status(200).json(categoriesWithImages);
     }   
     catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
+
 
 /**
  * @swagger
@@ -192,7 +213,7 @@ router.get("/category/:categoryName", async (req, res) => {
  *                   name:
  *                     type: string
  *                     description: The category name
- *                     example: "Electronics"
+ *                     example: "Category name"
  *                   image:
  *                     type: string
  *                     description: The URL of the category image
