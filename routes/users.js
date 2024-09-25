@@ -118,7 +118,7 @@ router.get("/user/all", async (req, res) => {
  */
 
 // Route to register a new user
-router.post("/auth/register", async (req, res) => {
+router.post("/auth/register",  async (req, res) => {
     const { error, value } = userValidationSchema.validate(req.body, { stripUnknown: true });
 
     if (error) {
