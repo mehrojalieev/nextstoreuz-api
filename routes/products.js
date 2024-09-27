@@ -131,7 +131,7 @@ router.get("/category/all", async (req, res) => {
         }));
 
         return res.status(200).json(categoriesWithImages);
-    }   
+    }
     catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -172,7 +172,7 @@ router.get("/category/:categoryName", async (req, res) => {
             return res.status(404).json({ message: "Category not found" });
         }
         res.status(200).json(singleCategory);
-    } 
+    }
     catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -276,7 +276,7 @@ router.get("/category/:categoryName", async (req, res) => {
  */
 
 
-router.post('/create',  async (req, res) => {
+router.post('/create', async (req, res) => {
 
     const { error, value } = productValidationSchema.validate(req.body, { stripUnknown: true });
 

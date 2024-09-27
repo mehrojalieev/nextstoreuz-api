@@ -118,7 +118,7 @@ router.get("/user/all", async (req, res) => {
  */
 
 // Route to register a new user
-router.post("/auth/register",  async (req, res) => {
+router.post("/auth/register", async (req, res) => {
     const { error, value } = userValidationSchema.validate(req.body, { stripUnknown: true });
 
     if (error) {
@@ -187,7 +187,7 @@ router.post("/auth/register",  async (req, res) => {
  *         description: Server error
  */
 
-const JWT_SECRET =  "Yh28$s%45jh6hU(*&^KJ(&(*kjhdSJ(&*hsdb273j";
+const JWT_SECRET = "Yh28$s%45jh6hU(*&^KJ(&(*kjhdSJ(&*hsdb273j";
 
 // LOGIN 
 router.post("/auth/login", async (req, res) => {
@@ -212,7 +212,7 @@ router.post("/auth/login", async (req, res) => {
             role: user.role
         }
 
-        const token = jwt.sign(userJWT, JWT_SECRET, {expiresIn: "5d"})
+        const token = jwt.sign(userJWT, JWT_SECRET, { expiresIn: "5d" })
         res.status(200).json({
             ststus: "OK",
             message: "Login Successfully",
