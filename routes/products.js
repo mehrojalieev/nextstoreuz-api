@@ -1,5 +1,6 @@
 const express = require('express');
 const ProductSchema = require('../models/products');
+const path = require("path")
 const Joi = require('joi');
 
 const router = express.Router();
@@ -14,7 +15,7 @@ const productValidationSchema = Joi.object({
         image: Joi.string().uri().required()
     }).required(),
     brand: Joi.string().required(),
-    imagesUrl: Joi.array().items(Joi.string().uri()).required()
+    imagesUrl: Joi.array().items(Joi.string().uri()).required() 
 });
 
 
@@ -326,6 +327,7 @@ router.post('/create', async (req, res) => {
 
 
 router.put('/update/:id', async (req, res) => {
+
     try {
         const updatedProduct = await ProductSchema.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!updatedProduct) {
